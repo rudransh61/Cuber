@@ -12,7 +12,7 @@ def merge_text_files(input_files, output_file):
         print(f'Error occurred: {e}')
 
 # List of input text files to merge
-input_files = ['combinations_length_1.txt','combinations_length_2.txt','combinations_length_3.txt','combinations_length_4.txt','combinations_length_5.txt','combinations_length_6.txt','combinations_length_7.txt','combinations_length_8.txt','combinations_length_9.txt','combinations_length_10.txt','combinations_length_11.txt']  # Add your file names here
+input_files = ['combinations_length_1.txt','combinations_length_2.txt','combinations_length_3.txt','combinations_length_4.txt','combinations_length_5.txt','combinations_length_6.txt','combinations_length_7.txt']  # Add your file names here
 
 # Output file where the merged content will be saved
 output_file = 'merged_output.txt'
