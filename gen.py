@@ -1,12 +1,12 @@
 from itertools import product
 
 # Define the characters
-characters = 'abcd'
+characters = '1234'
 '''
-A = U
-B = D
-C = R
-D = L
+1 = U
+2 = D
+3 = R
+4 = L
 
 '''
 
