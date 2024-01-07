@@ -1,3 +1,7 @@
+def swap(var1, var2):
+    return var2, var1
+
+
 def is_solved(Uface, Dface, Lface, Rface, Fface, Bface):
     # Check for Uface
     if any(Uface[i][j] != Uface[0][0] for i in range(2) for j in range(2)):
@@ -26,8 +30,24 @@ def is_solved(Uface, Dface, Lface, Rface, Fface, Bface):
     return True
 
 # all turns 
-def turnU(Uface, Dface, Lface, Rface, Fface, Bface):
+def turnF(Uface, Dface, Lface, Rface, Fface, Bface):
     pass
+
+def turnL(Uface, Dface , Lface ,Rface , Fface , Bface):
+    #U[0][0] U[1][0] to D[1][0] D[0][0]
+    Uface[0][0] , Dface[1][0] = swap(Uface[0][0],Dface[1][0])
+    Uface[1][0] , Dface[0][0] = swap(Uface[1][0],Dface[0][0])
+
+    Lface[0], Lface[1] = swap(Lface[0],Lface[1]) 
+    Fface[0], Bface[0] = swap(Fface[0],Bface[0])
+
+    return Uface,Dface,Lface,Rface,Fface,Bface
+
+
+ 
+
+     
+    
 
 def solve_2x2x1(Uface, Dface, Lface, Rface, Fface, Bface):
     U = Uface
@@ -44,25 +64,27 @@ def solve_2x2x1(Uface, Dface, Lface, Rface, Fface, Bface):
                 for digit in char:
                     if digit == '1':
                         # print("1check", end=' ')
-                        turnU(U, D, L, R, F, B)
+                        turnF(U, D, L, R, F, B)
                         pass
                     elif digit == '2':
                         # print("2check", end=' ')
+
                         pass
                     elif digit == '3':
                         # print("3check", end=' ')
                         pass
                     elif digit == '4':
                         # print("4check", end=' ')
-                        pass
+                        U,D,L,R,F,B = turnL(U,D,L,R,F,B)
+                        #pass
                     else:
                         print("Invalid character found in file")
     print()
 
 
 # NOTE:
-# 1 = U
-# 2 = D
+# 1 = F
+# 2 = B
 # 3 = R
 # 4 = L
 
