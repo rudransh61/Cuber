@@ -44,6 +44,17 @@ def turnL(Uface, Dface , Lface ,Rface , Fface , Bface):
     return Uface,Dface,Lface,Rface,Fface,Bface
 
 
+def turnB(Uface, Dface , Lface ,Rface , Fface , Bface):
+    #U[0][0] U[1][0] to D[1][0] D[0][0]
+    Uface[0][1] , Dface[1][1] = swap(Uface[0][1],Dface[1][1])
+    Uface[1][1] , Dface[0][1] = swap(Uface[1][1],Dface[0][1])
+
+    Lface[1], Lface[0] = swap(Lface[1],Lface[0]) 
+    Fface[1], Bface[1] = swap(Fface[1],Bface[1])
+
+    return Uface,Dface,Lface,Rface,Fface,Bface
+
+
  
 
      
@@ -64,12 +75,10 @@ def solve_2x2x1(Uface, Dface, Lface, Rface, Fface, Bface):
                 for digit in char:
                     if digit == '1':
                         # print("1check", end=' ')
-                        turnF(U, D, L, R, F, B)
-                        pass
+                        U,D,L,R,F,B = turnF(U, D, L, R, F, B)
                     elif digit == '2':
                         # print("2check", end=' ')
-
-                        pass
+                        U,D,L,R,F,B = turnB(U, D, L, R, F, B)
                     elif digit == '3':
                         # print("3check", end=' ')
                         pass
@@ -79,7 +88,8 @@ def solve_2x2x1(Uface, Dface, Lface, Rface, Fface, Bface):
                         #pass
                     else:
                         print("Invalid character found in file")
-    print()
+    print("")
+    return None
 
 
 # NOTE:
@@ -88,22 +98,22 @@ def solve_2x2x1(Uface, Dface, Lface, Rface, Fface, Bface):
 # 3 = R
 # 4 = L
 
-def main():
-    U = [[1, 2], [1, 1]]
-    D = [[2, 2], [2, 2]]
-    L = [3, 3]
-    R = [4, 4]
-    F = [5, 5]
-    B = [6, 6]
+U = [[1, 1], 
+     [1, 1]]
+D = [[2, 2], 
+     [2, 2]]
+L = [3, 3]
+R = [4, 4]
+F = [5, 5]
+B = [6, 6]
+U,D,R,L,F,B = turnL(U,D,R,L,F,B)
+print(U,D,R,L,F,B)
 
-    if is_solved(U, D, L, R, F, B):
-        print("YES it is solved!")
-    else:
-        print("No it is not solved!")
+if is_solved(U, D, L, R, F, B):
+    print("YES it is solved!")
+else:
+    print("No it is not solved!")
+    # Solve
+    solve_2x2x1(U, D, L, R, F, B)
 
-        # Solve
-        solve_2x2x1(U, D, L, R, F, B)
 
-
-if __name__ == "__main__":
-    main()
