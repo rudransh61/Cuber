@@ -1,7 +1,6 @@
 def swap(var1, var2):
     return var2, var1
 
-
 def is_solved(Uface, Dface, Lface, Rface, Fface, Bface):
     # Check for Uface
     if any(Uface[i][j] != Uface[0][0] for i in range(2) for j in range(2)):
@@ -29,91 +28,81 @@ def is_solved(Uface, Dface, Lface, Rface, Fface, Bface):
 
     return True
 
-# all turns 
-def turnF(Uface, Dface, Lface, Rface, Fface, Bface):
-    pass
-
-def turnL(Uface, Dface , Lface ,Rface , Fface , Bface):
-    #U[0][0] U[1][0] to D[1][0] D[0][0]
+def turnL2(Uface, Dface , Lface ,Rface , Fface , Bface):
     Uface[0][0] , Dface[1][0] = swap(Uface[0][0],Dface[1][0])
     Uface[1][0] , Dface[0][0] = swap(Uface[1][0],Dface[0][0])
 
     Lface[0], Lface[1] = swap(Lface[0],Lface[1]) 
     Fface[0], Bface[0] = swap(Fface[0],Bface[0])
 
-    return Uface,Dface,Lface,Rface,Fface,Bface
+    return Uface, Dface, Lface, Rface, Fface, Bface
 
-
-def turnB(Uface, Dface , Lface ,Rface , Fface , Bface):
-    #U[0][0] U[1][0] to D[1][0] D[0][0]
+def turnR2(Uface, Dface , Lface ,Rface , Fface , Bface):
     Uface[0][1] , Dface[1][1] = swap(Uface[0][1],Dface[1][1])
     Uface[1][1] , Dface[0][1] = swap(Uface[1][1],Dface[0][1])
 
-    Lface[1], Lface[0] = swap(Lface[1],Lface[0]) 
+    Rface[0], Rface[1] = swap(Rface[0],Rface[1]) 
     Fface[1], Bface[1] = swap(Fface[1],Bface[1])
 
-    return Uface,Dface,Lface,Rface,Fface,Bface
+    return Uface, Dface, Lface, Rface, Fface, Bface
 
+def turnF2(Uface, Dface, Lface, Rface, Fface, Bface):
+    Uface[0][0], Rface[0] = swap(Rface[0], Uface[0][0])
+    Uface[0][1], Rface[1] = swap(Rface[1], Uface[0][1])
+    Dface[0][0], Lface[0] = swap(Lface[0], Dface[0][0])
+    Dface[0][1], Lface[1] = swap(Lface[1], Dface[0][1])
 
- 
+    Fface[0], Fface[1] = swap(Fface[1], Fface[0])
 
-     
-    
+    return Uface, Dface, Lface, Rface, Fface, Bface
 
-def solve_2x2x1(Uface, Dface, Lface, Rface, Fface, Bface):
-    U = Uface
-    D = Dface
-    L = Lface
-    R = Rface
-    F = Fface
-    B = Bface
-    with open("merged_output.txt", "r") as myfile:
-        for mystring in myfile:
-            digits = mystring.split()
-            for char in digits:
-                print(char, end=' ')
-                for digit in char:
-                    if digit == '1':
-                        # print("1check", end=' ')
-                        U,D,L,R,F,B = turnF(U, D, L, R, F, B)
-                    elif digit == '2':
-                        # print("2check", end=' ')
-                        U,D,L,R,F,B = turnB(U, D, L, R, F, B)
-                    elif digit == '3':
-                        # print("3check", end=' ')
-                        pass
-                    elif digit == '4':
-                        # print("4check", end=' ')
-                        U,D,L,R,F,B = turnL(U,D,L,R,F,B)
-                        #pass
-                    else:
-                        print("Invalid character found in file")
-    print("")
-    return None
+def turnB2(Uface, Dface, Lface, Rface, Fface, Bface):
+    Uface[0][1], Rface[0] = swap(Rface[0], Uface[0][1])
+    Uface[1][1], Rface[1] = swap(Rface[1], Uface[1][1])
+    Dface[0][1], Lface[0] = swap(Lface[0], Dface[0][1])
+    Dface[1][1], Lface[1] = swap(Lface[1], Dface[1][1])
 
+    Bface[0], Bface[1] = swap(Bface[1], Bface[0])
 
-# NOTE:
-# 1 = F
-# 2 = B
-# 3 = R
-# 4 = L
+    return Uface, Dface, Lface, Rface, Fface, Bface
 
-U = [[1, 1], 
+def generate_moves(cube_state, depth, move_sequence):
+    if depth == 0:
+        if is_solved(*cube_state):
+            print("Solution found:", move_sequence)
+            return True
+        return False
+
+    for move in ['L2', 'R2', 'F2', 'B2']:
+        new_state = cube_state
+        if move == 'L2':
+            new_state = turnL2(*new_state)
+        elif move == 'R2':
+            new_state = turnR2(*new_state)
+        elif move == 'F2':
+            new_state = turnF2(*new_state)
+        elif move == 'B2':
+            new_state = turnB2(*new_state)
+
+        if generate_moves(new_state, depth - 1, move_sequence + [move]):
+            return True
+
+    return False
+
+def solve_2x2x1(cube_state):
+    depth = 1
+    while not generate_moves(cube_state, depth, []):
+        depth += 1
+
+# Initial state
+U = [[1, 1],
      [1, 1]]
-D = [[2, 2], 
+D = [[2, 2],
      [2, 2]]
 L = [3, 3]
 R = [4, 4]
 F = [5, 5]
 B = [6, 6]
-U,D,R,L,F,B = turnL(U,D,R,L,F,B)
-print(U,D,R,L,F,B)
 
-if is_solved(U, D, L, R, F, B):
-    print("YES it is solved!")
-else:
-    print("No it is not solved!")
-    # Solve
-    solve_2x2x1(U, D, L, R, F, B)
-
-
+# Solve the cube
+solve_2x2x1((U, D, L, R, F, B))
